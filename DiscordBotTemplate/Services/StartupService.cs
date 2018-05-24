@@ -13,6 +13,7 @@ namespace DiscordBotTemplate.Services
     {
         private readonly DiscordSocketClient _discord;
         private readonly CommandService _commands;
+        private readonly Configuration.Configuration _config;
 
 
         /// <summary>
@@ -23,7 +24,8 @@ namespace DiscordBotTemplate.Services
         /// <param name="config">The configuration object to use.</param>
         public StartupService(
             DiscordSocketClient discord,
-            CommandService commands
+            CommandService commands,
+            Configuration.Configuration config
         )
         {
             _discord = discord;
@@ -43,8 +45,7 @@ namespace DiscordBotTemplate.Services
             Func<Task> clientReady;
 
 
-            // TODO: Put your Discord Bot's token here.
-            discordToken = "";
+            discordToken = _config.DiscordToken;
 
             if (string.IsNullOrWhiteSpace(discordToken))
             {
@@ -99,6 +100,5 @@ namespace DiscordBotTemplate.Services
             // Load commands and modules into the command service.
             await _commands.AddModulesAsync(Assembly.GetEntryAssembly());
         }
-
     }
 }
