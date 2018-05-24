@@ -30,6 +30,7 @@ namespace DiscordBotTemplate.Services
         {
             _discord = discord;
             _commands = commands;
+            _config = config;
         }
 
 
