@@ -12,9 +12,7 @@ namespace DiscordBotTemplate.Services
         private readonly DiscordSocketClient _discord;
         private readonly CommandService _commands;
         private readonly IServiceProvider _provider;
-
-
-        private const string _prefix = "?";
+        private readonly Configuration.Configuration _config;
 
 
         /// <summary>
@@ -23,15 +21,18 @@ namespace DiscordBotTemplate.Services
         /// <param name="discord">The Discord socket client to use.</param>
         /// <param name="commands">The command service to use.</param>
         /// <param name="provider">The service provider to use.</param>
+        /// <param name="config">The config to use.</param>
         public CommandHandler(
             DiscordSocketClient discord,
             CommandService commands,
-            IServiceProvider provider
+            IServiceProvider provider,
+            Configuration.Configuration config
         )
         {
             _discord = discord;
             _commands = commands;
             _provider = provider;
+            _config = config;
 
             _discord.MessageReceived += OnMessageReceivedAsync;
         }
@@ -70,12 +71,12 @@ namespace DiscordBotTemplate.Services
             context = new SocketCommandContext(_discord, message);
 
             // Check if the message has a valid command prefix.
-            if (message.HasStringPrefix(_prefix, ref argPos) || message.HasMentionPrefix(_discord.CurrentUser, ref argPos))
+            if (message.HasStringPrefix(_config.Prefix, ref argPos) || message.HasMentionPrefix(_discord.CurrentUser, ref argPos))
             {
 
                 // Look at the second character of the command, if it's the same as the prefix then ignore it.
                 // This gets around the bot treating a message like '...' as a command and trying to process it.
-                if (!string.Equals(message.Content.Substring(1, 1), _prefix))
+                if (!string.Equals(message.Content.Substring(1, 1), _config.Prefix))
                 {
                     IResult result;
 
